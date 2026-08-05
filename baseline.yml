@@ -1,0 +1,6 @@
+---
+- name: Apply Ubuntu Baseline
+  hosts: all
+  become: true
+  roles:
+    - baseline

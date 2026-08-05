@@ -1,0 +1,16 @@
+---
+baseline_packages:
+  - vim
+  - htop
+  - curl
+  - git
+  - tmux
+
+baseline_users:
+  - name: nessus
+    comment: "Nessus scan account"
+    shell: /bin/bash
+
+baseline_motd: "Managed by Ansible - do not edit locally"
+
+baseline_upgrade_all: true
