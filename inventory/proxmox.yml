@@ -1,12 +1,11 @@
 ---
-plugin: community.general.proxmox
+plugin: community.proxmox.proxmox
 url: "{{ lookup('ansible.builtin.env', 'PROXMOX_URL') }}"
 user: "{{ lookup('ansible.builtin.env', 'PROXMOX_USER') }}"
 token_id: "{{ lookup('ansible.builtin.env', 'PROXMOX_TOKEN_ID') }}"
 token_secret: "{{ lookup('ansible.builtin.env', 'PROXMOX_TOKEN_SECRET') }}"
 validate_certs: false          # lab; self-signed PVE certs
 want_facts: true
-plugin: community.proxmox.proxmox
 groups:
   running: proxmox_status == 'running'
 compose:
