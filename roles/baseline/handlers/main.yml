@@ -3,3 +3,7 @@
   ansible.builtin.service:
     name: cron
     state: restarted
+
+- name: Systemd_daemon_reload
+  ansible.builtin.systemd:
+    daemon_reload: true
