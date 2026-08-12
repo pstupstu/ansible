@@ -1,0 +1,49 @@
+---
+- name: DISA STIG audit
+  hosts: all
+  become: true
+  vars:
+    benchmark_file: "U_RHEL_9_V2R9_STIG_SCAP_1-3_Benchmark.xml"
+    disa_benchmark: "files/disa/{{ benchmark_file }}"
+    profile: "xccdf_mil.disa.stig_profile_MAC-2_Sensitivte"
+    outdir: /tmp/stig-audit
+
+  tasks:
+    - name: Verify required vars provided
+      ansible.builtin.assert:
+        that:
+          - benchmark_file is defined
+          - profile is defined
+        fail_msg: "Launch wth benchmark_file and profile extra vars"
+    
+    - name: Install scanner
+      ansible.builtin.dnf:
+        name: openscap-scanner
+        state: present
+
+    - name: Copy DISA benchmark to target
+      ansible.builtin.copy:
+        src: "{{ disa_benchmark }}"
+        dest: /tmp/disa-benchmark.xml
+
+    - name: Run scan
+      ansible.builtin.command: >
+        oscap xccdf eval
+        --profile {{ profile }}
+        --results {{ outdir }}/results-xccdf.xml
+        --stig-viewer {{ outdir }}/results-stigviewer.xml
+        --report {{ outdir }}/report.html
+        /tmp/disa-benchmark.html
+      register: scan
+      changed_when: false
+      failed_when: scan.rc not in [0, 2]
+
+    - name: Pull results back to controller
+      ansible.builtin.fetch:
+        src: "{{ outdir }}/{{ item }}"
+        dest: "audit-results/{{ inventory_hostname }}/"
+        flat: true
+      loop:
+        - results-xccdf.xml
+        - results-stigviewer.vml
+        - report.html
