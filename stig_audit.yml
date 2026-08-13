@@ -50,5 +50,5 @@
         flat: true
       loop:
         - results-xccdf.xml
-        - results-stigviewer.vml
+        - results-stigviewer.xml
         - report.html
