@@ -15,7 +15,12 @@
           - benchmark_file is defined
           - profile is defined
         fail_msg: "Launch wth benchmark_file and profile extra vars"
-    
+
+    - name: Create output dir
+      ansible.builtin.file:
+        path: "{{ output }}"
+        state: directory
+
     - name: Install scanner
       ansible.builtin.dnf:
         name: openscap-scanner
