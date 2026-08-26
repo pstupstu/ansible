@@ -50,3 +50,60 @@
     name: America/Los_Angeles
   notify: Restart cron
 
+- name: Ensure chrony service is enabled and running
+  ansible.builtin.systemd:
+    name: chrony.target
+    enabled: true
+    state: started
+
+- name: SSHD PernitRootLogin no
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    state: present
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+  notify: sshd_restart
+
+- name: Create opt scripts directory
+  ansible.builtin.file:
+    path: /opt/scripts
+    state: directory
+    mode: '0750'
+    owner: root
+    group: root
+
+- name: Create opt scripts subdirectories
+  ansible.builtin.file:
+    path: "/opt/scripts/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+  loop: "{{ baseline_opt_dirs }}"
+
+- name: Set swappiness when mem greater than 4gb
+  ansible.posix.sysctl:
+    name: vm.swappiness
+    value: '10'
+    state: present
+    reload: true
+    sysctl_file: /etc/sysctl.d/99-baseline.conf
+  when: ansible_facts['memtotal_mb'] | int > 4096
+
+- name: Check motd
+  ansible.builtin.stat:
+    path: /etc/motd
+  register: motd
+
+- name: If motd exists
+  ansible.builtin.debug:
+    msg: "motd exists, it's size is {{ motd.stat.size }}"
+  when: motd.stat.exists
+
+- name: If motd not exist
+  ansible.builtin.debug:
+    msg: "motd does not exist"
+  when: not motd.stat.exists
+
+
+
+

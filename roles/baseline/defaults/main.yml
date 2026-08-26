@@ -14,3 +14,10 @@ baseline_users:
 baseline_motd: "Managed by Ansible - do not edit locally"
 
 baseline_upgrade_all: true
+
+
+baseline_opt_dirs:
+  - logs
+  - goodstuff
+  - badstuff
+  - stuffstuff
