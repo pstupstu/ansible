@@ -50,9 +50,14 @@
     name: America/Los_Angeles
   notify: Restart cron
 
+- name: Ensure chrony is installed
+  ansible.builtin.apt:
+    name: chrony
+    state: present
+
 - name: Ensure chrony service is enabled and running
   ansible.builtin.systemd:
-    name: chrony.target
+    name: chrony
     enabled: true
     state: started
 
