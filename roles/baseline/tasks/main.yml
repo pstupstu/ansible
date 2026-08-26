@@ -109,6 +109,21 @@
     msg: "motd does not exist"
   when: not motd.stat.exists
 
+- name: deploy log script
+  ansible.builtin.template:
+    src: logs.sh.j2
+    dest: "{{ baseline_scripts }}/{{ baseline_log_script }}"
+    mode: '0750'
+
+- name: create cron job
+  ansible.builtin.cron:
+    name: "date log"
+    minute: "0"
+    hour: "5"
+    job: "{{ baseline_scripts }}/{{ baseline_log_script }}"
+
+    
+
 
 
 

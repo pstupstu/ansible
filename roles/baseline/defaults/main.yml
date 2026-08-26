@@ -15,9 +15,13 @@ baseline_motd: "Managed by Ansible - do not edit locally"
 
 baseline_upgrade_all: true
 
-
 baseline_opt_dirs:
   - logs
   - goodstuff
   - badstuff
   - stuffstuff
+
+baseline_scripts: /opt/scripts
+baseline_log_script: logs.sh
+
+baseline_log_path: /opt/scripts/logs/date.log
