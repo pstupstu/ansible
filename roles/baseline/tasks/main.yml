@@ -37,6 +37,15 @@
     state: present
   loop: "{{ baseline_users }}"
 
+- name: Create nessus scan account
+  ansible.builtin.user:
+    name: "nessus"
+    shell: /bin/bash
+    password: "{{ vault_nessus_password | password_hash('sha512') }}"
+    state: present
+
+
+
 - name: Deploy MOTD
   ansible.builtin.template:
     src: motd.j2
