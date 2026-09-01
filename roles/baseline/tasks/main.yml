@@ -44,8 +44,6 @@
     password: "{{ vault_nessus_password | password_hash('sha512') }}"
     state: present
 
-
-
 - name: Deploy MOTD
   ansible.builtin.template:
     src: motd.j2
@@ -130,9 +128,3 @@
     minute: "0"
     hour: "5"
     job: "{{ baseline_scripts }}/{{ baseline_log_script }}"
-
-    
-
-
-
-
