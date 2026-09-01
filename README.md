@@ -1,3 +1,4 @@
 # ansible
 
-Testing git push
+This is my repo for learning ansible roles/tasks along with AAP.
+-=Pstu=-
