@@ -1,5 +1,5 @@
 ---
-- name: update apt cache
+- name: Update apt cache
   ansible.builtin.apt:
     update_cache: true
     cache_valid_time: 3600
@@ -14,7 +14,7 @@
     name: telnet
     state: absent
 
-- name: disable ctrl-alt-del
+- name: Disable ctrl-alt-del
   ansible.builtin.systemd:
     name: ctrl-alt-del.target
     masked: true
@@ -88,6 +88,7 @@
   ansible.builtin.file:
     path: "/opt/scripts/{{ item }}"
     state: directory
+    mode: '0750'
     owner: root
     group: root
   loop: "{{ baseline_opt_dirs }}"
@@ -116,13 +117,13 @@
     msg: "motd does not exist"
   when: not motd.stat.exists
 
-- name: deploy log script
+- name: Deploy log script
   ansible.builtin.template:
     src: logs.sh.j2
     dest: "{{ baseline_scripts }}/{{ baseline_log_script }}"
     mode: '0750'
 
-- name: create cron job
+- name: Create cron job
   ansible.builtin.cron:
     name: "date log"
     minute: "0"

@@ -1,0 +1,14 @@
+---
+- name: Test AWS Module
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks: 
+    - name: Check boto
+      ansible.builtin.command: python3 -c "import boto3; print(boto3.__version__)"
+      register: boto
+      changed_when: false
+      failed_when: false
+
+    - ansible.builtin.debug:
+        var: boto
