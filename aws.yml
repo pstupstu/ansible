@@ -10,7 +10,7 @@
     vpc_subnet_id: subnet-dc86a2b8
     sg_id: sg-014c8a854437e8d33
 
-  tasks
+  tasks:
     - name: Find latest Ubuntu 24.04 AMI
       amazon.aws.ec2_ami_info:
         region: "{{ aws_region }}"
