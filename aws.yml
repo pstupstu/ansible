@@ -61,3 +61,4 @@
       amazon.aws.ec2_instance:
         state: terminated
         instance_ids: "{{ build_instance.instances[0].instance_id }}"
+        region: "{{ aws_region }}"
