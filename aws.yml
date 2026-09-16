@@ -23,3 +23,7 @@
     - name: set newest AMI id
       ansible.builtin.set_fact:
         base_ami: "{{ (ami_search.images | sort(attribute='creation_date') | last).image_id }}"
+
+    - name: show AMI id
+      ansible.builtin.debug:
+        msg: "{{ base_ami }}"
