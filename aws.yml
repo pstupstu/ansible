@@ -1,14 +1,25 @@
 ---
-- name: Test AWS Module
+- name: Provision build instance 
   hosts: localhost
   connection: local
   gather_facts: false
-  tasks: 
-    - name: Check boto
-      ansible.builtin.command: python3 -c "import boto3; print(boto3.__version__)"
-      register: boto
-      changed_when: false
-      failed_when: false
+  vars:
+    aws_region: us-west-1
+    key_name: ansible-lab
+    instance_type: t3.micro
+    vpc_subnet_id: subnet-dc86a2b8
+    sg_id: sg-014c8a854437e8d33
 
-    - ansible.builtin.debug:
-        var: boto
+  tasks
+    - name: Find latest Ubuntu 24.04 AMI
+      amazon.aws.ec2_ami_info:
+        region: "{{ aws_region }}"
+        owners: "099720109477"
+        filters:
+          name: "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
+          state: available
+        register: ami_search
+
+    - name: set newest AMI id
+      ansible.builtin.set_fact:
+        base_ami: "{{ (ami_search.images | sort(attribute='creation_date') | last).image_id }}"
