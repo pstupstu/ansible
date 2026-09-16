@@ -18,7 +18,7 @@
         filters:
           name: "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
           state: available
-        register: ami_search
+      register: ami_search
 
     - name: set newest AMI id
       ansible.builtin.set_fact:
