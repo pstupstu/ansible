@@ -68,6 +68,54 @@
     - ansible.builtin.reboot:
         reboot_timeout: 300
 
+- name: Prepare ec2 for AMI
+  hosts: build
+  become: true
+  tasks:
+    - name: Clean apt cache
+      ansible.builtin.apt:
+        clean: true
+        autoremove: true
+    - name: Find apt lists
+      ansible.builtin.find:
+        paths: /var/lib/apt/lists/
+        recurse: true
+      register: apt_lists
+    - name: Clean apt lists directory
+      ansible.builtin.file:
+        state: absent
+        path: "{{ item.path }}"
+      loop: "{{ apt_lists.files }}"
+      loop_control:
+        label: "{{ item.path }}"
+    - name: Clean bash history
+      ansible.builtin.file:
+        path: /home/ec2-user/.bash_history
+        state: absent
+    - name: Find authorized keys
+      ansible.builtin.find:
+        paths: /home
+        patterns: authorized_keys
+        recurse: true
+      register: user_keys
+    - name: Delete authorized keys
+      ansible.builtin.file:
+        state: absent
+        path: "{{ item.path }}"
+      loop: "{{ user_keys.files }}"
+    - name: Find SSH host keys
+      ansible.builtin.find:
+        paths: /etc/ssh/
+        patterns: "ssh_host_*"
+      register: ssh_host
+    - name: Delete SSH host keys
+      ansible.builtin.file:
+        state: absent
+        path: "{{ item.path }}"
+      loop: "{{ ssh_hots.files }}"
+      loop_control:
+        label: "{{ item.path }}"
+
 - name: Bake and clean
   hosts: localhost
   connection: local
