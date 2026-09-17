@@ -115,6 +115,8 @@
       loop: "{{ ssh_host.files }}"
       loop_control:
         label: "{{ item.path }}"
+    - name: Cloud init clean
+      ansible.builtin.shell: clout-init clean --logs
 
 - name: Bake and clean
   hosts: localhost
