@@ -3,6 +3,7 @@
   hosts: localhost
   connection: local
   gather_facts: false
+  vars_files: group_vars/all/aws.yml
   vars:
     vpc_subnet_id: subnet-dc86a2b8
     sg_id: sg-014c8a854437e8d33
@@ -64,6 +65,7 @@
   hosts: localhost
   connection: local
   gather_facts: false
+  vars_files: group_vars/all/aws.yml
   tasks:
     - name: Restart EC2
       amazon.aws.ec2_instance:
@@ -81,6 +83,7 @@
   hosts: localhost
   connection: local
   gather_facts: false
+  vars_files: group_vars/all/aws.yml
   tasks:
     - name: Create AMI
       amazon.aws.ec2_ami:
