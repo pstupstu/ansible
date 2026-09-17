@@ -112,7 +112,7 @@
       ansible.builtin.file:
         state: absent
         path: "{{ item.path }}"
-      loop: "{{ ssh_hots.files }}"
+      loop: "{{ ssh_host.files }}"
       loop_control:
         label: "{{ item.path }}"
 
