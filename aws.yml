@@ -1,5 +1,5 @@
 ---
-- name: Provision build instance 
+- name: Provision build instance
   hosts: localhost
   connection: local
   gather_facts: false
@@ -20,11 +20,11 @@
           state: available
       register: ami_search
 
-    - name: set newest AMI id
+    - name: Set latest Ubuntu AMI id
       ansible.builtin.set_fact:
         base_ami: "{{ (ami_search.images | sort(attribute='creation_date') | last).image_id }}"
 
-    - name: show AMI id
+    - name: Show AMI id
       ansible.builtin.debug:
         msg: "{{ base_ami }}"
 
@@ -57,8 +57,8 @@
         delay: 10
         timeout: 300
 
-    - name: Remove ec2
-      amazon.aws.ec2_instance:
-        state: terminated
-        instance_ids: "{{ build_instance.instances[0].instance_id }}"
-        region: "{{ aws_region }}"
+    - name: debug
+      ansible.builtin.debug:
+          msg: "{{ build_instance }}"
+
+
