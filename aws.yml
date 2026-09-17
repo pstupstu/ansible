@@ -62,22 +62,11 @@
     - baseline
 
 - name: Reboot for safe measure
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  vars_files: group_vars/all/aws.yml
+  hosts: build
+  become: true
   tasks:
-    - name: Restart EC2
-      amazon.aws.ec2_instance:
-        region: "{{ aws_region }}"
-        instance_ids: "{{ hostvars[groups['build'][0]]['instance_id'] }}"
-        state: restarted
-    - name: Wait for SSH to be up
-      ansible.builtin.wait_for:
-        host: "{{ build_instance.instances[0].public_ip_address }}"
-        port: 22
-        delay: 10
-        timeout: 300
+    - ansible.builtin.reboot:
+        reboot_timeout: 300
 
 - name: Bake and clean
   hosts: localhost
